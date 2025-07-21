@@ -1,48 +1,56 @@
-document.getElementById('cash-out-enable').addEventListener('click', function() {
-    document.getElementById('cashOutForm').classList.remove('hidden');
-    document.getElementById('addMoneyForm').classList.add('hidden');
+function toggle(add_id, rmv_id) {
+    document.getElementById(add_id).classList.add('hidden');
+    document.getElementById(rmv_id).classList.remove('hidden');
+}
+
+document.getElementById('cash-out-enable').addEventListener('click', function () {
+    toggle('addMoneyForm', 'cashOutForm')
+});
+
+document.getElementById('add-money-enable').addEventListener('click', function () {
+    toggle('cashOutForm', 'addMoneyForm')
+});
+
+
+document.getElementById('add-money-button').addEventListener('click', function (event) {
+    const addMoney = getInputValue('amountAdd')
+    const pin = getInputValue('pin')
+    setNewBalance(pin, addMoney, '+')
 
 })
 
-document.getElementById('add-money-enable').addEventListener('click', function() {
-    document.getElementById('cashOutForm').classList.add('hidden');
-    document.getElementById('addMoneyForm').classList.remove('hidden');
-
+document.getElementById('cash-out-button').addEventListener('click', function (event) {
+    const outMoney = getInputValue('amountOut')
+    const pin = getInputValue('pin2')
+    setNewBalance(pin, outMoney, '-')
 })
 
-document.getElementById('add-money-button').addEventListener('click', function(event) {
-    const addMoney = document.getElementById('amountAdd').value
-    const pin = document.getElementById('pin').value
+function getInputValue(id) {
+    const value = document.getElementById(id).value;
+    return value;
+}
 
-    if(pin === '123') {
+function setNewBalance(pinx, amount, opr) {
+        if (pinx === '123' && opr === '-') {
         const prevBal = document.getElementById('balance').innerText;
-
-        const newBal = parseInt(prevBal) + parseInt(addMoney);
-        document.getElementById('balance').innerText = newBal;
-        // document.getElementById('add-money-button').setAttribute('disabled', true)
-    }
-    else {
-        alert('Wrong Pin!!')
-    }
-})
-
-// Cashout
-document.getElementById('cash-out-button').addEventListener('click', function(event) {
-    const outMoney = document.getElementById('amountOut').value
-    const pin = document.getElementById('pin2').value
-
-    if(pin === '123') {
-        const prevBal = document.getElementById('balance').innerText;
-        if(parseInt(prevBal) >= parseInt(outMoney)) {
-            const newBal = parseInt(prevBal) - parseInt(outMoney);
+        if (parseInt(prevBal) >= parseInt(amount)) {
+            const newBal = parseInt(prevBal) - parseInt(amount);
             document.getElementById('balance').innerText = newBal;
         }
-        else{
+        else {
             alert('OOPS!! Insufficient Balance!!')
-        } 
-    
+        }
+
     }
+
+    else if (pinx === '123' && opr === '+') {
+        const prevBal = document.getElementById('balance').innerText;
+
+        const newBal = parseInt(prevBal) + parseInt(amount);
+        document.getElementById('balance').innerText = newBal;
+    }
+    
     else {
         alert('Wrong Pin!!')
     }
-})
+}
